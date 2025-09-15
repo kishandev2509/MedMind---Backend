@@ -1,8 +1,9 @@
 from chat_bot.output_parsers import ChatBotOutputParser
+from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableBranch, RunnableLambda, RunnablePassthrough
 
 # from models import biomistral_llm
-from models import groq_llm, medgemma_llm
+from models import groq_llm, medgemma_llm, gemma31b_llm
 from chat_bot.prompts import general_prompt, medical_prompt, router_prompt  # , symptoms_prompt
 
 output_parser = ChatBotOutputParser()
@@ -25,7 +26,7 @@ def debug_parser(input_):
     return input_
 
 
-router_chain = router_prompt | groq_llm | output_parser
-general_chain = {"query": RunnablePassthrough(func=debug_parser)} | general_prompt | groq_llm | output_parser
+router_chain = router_prompt | gemma31b_llm | StrOutputParser()
+general_chain = {"query": RunnablePassthrough(func=debug_parser)} | general_prompt | gemma31b_llm | output_parser
 medical_chain = RunnablePassthrough(func=debug_parser) | medical_prompt | medgemma_llm | output_parser
 chat_chain = RunnableLambda(func=add_route) | RunnableBranch((route_predicate, medical_chain), general_chain)
