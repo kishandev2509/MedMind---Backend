@@ -4,7 +4,7 @@ from langchain_core.runnables import RunnablePassthrough
 from models import biomistral_llm, gemma31b_llm, groq_llm
 from symptoms.input_types import SymptomsInput
 from symptoms.output_parsers import SymptomsOutputParser
-from symptoms.prompts import json_converter_prompt, symptoms_prompt_cover, symptoms_prompt
+from symptoms.prompts import json_converter_prompt, symptoms_prompt, symptoms_prompt_cover
 
 output_parser = StrOutputParser()
 output_parser = SymptomsOutputParser()

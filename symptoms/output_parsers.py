@@ -1,6 +1,8 @@
-from pydantic import BaseModel
-from langchain_core.output_parsers import BaseOutputParser
 import re
+
+from langchain_core.output_parsers import BaseOutputParser
+from pydantic import BaseModel
+
 
 class DiseasePrediction(BaseModel):
     disease: str

@@ -3,10 +3,9 @@
 # It simulates a modular project by defining the API routers within this single file.
 
 import uvicorn
-from fastapi import FastAPI
-
-from fastapi.middleware.cors import CORSMiddleware
 from api.chat_api import chat_router
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 # --- Main Application Logic ---
 # This is where the main FastAPI app is initialized.
