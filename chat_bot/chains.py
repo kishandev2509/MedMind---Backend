@@ -5,7 +5,7 @@ from chat_bot.output_parsers import ChatBotOutputParser
 from chat_bot.prompts import general_prompt, medical_prompt, router_prompt  # , symptoms_prompt
 
 # from models import biomistral_llm
-from models import gemma31b_llm, medgemma_llm
+from models import gemma31b_llm, medgemma_llm, groq_llm
 
 output_parser = ChatBotOutputParser()
 
@@ -24,10 +24,10 @@ def add_route(query):
 
 def debug_parser(input_):
     print(f"start\n{input_}\nend")  # Debugging line to see raw output
-    return input_
+    return input_["query"]
 
 
-router_chain = router_prompt | gemma31b_llm | StrOutputParser()
-general_chain = {"query": RunnablePassthrough(func=debug_parser)} | general_prompt | gemma31b_llm | output_parser
+router_chain = router_prompt | groq_llm | StrOutputParser()
+general_chain = RunnablePassthrough(func=debug_parser) | general_prompt | gemma31b_llm | output_parser
 medical_chain = RunnablePassthrough(func=debug_parser) | medical_prompt | medgemma_llm | output_parser
 chat_chain = RunnableLambda(func=add_route) | RunnableBranch((route_predicate, medical_chain), general_chain)
