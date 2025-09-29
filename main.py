@@ -5,8 +5,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from langserve import add_routes
 
-from chat_bot.chains import chat_chain
-from symptoms.chains import groq_symptoms_chain, symptoms_chain
+from v1.chains import chat_chain, medgemma_symptoms_chain
+from v1.input_parsers import ChatInput
 
 # Load environment variables
 load_dotenv()
@@ -22,18 +22,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 def is_ollama_running() -> bool:
     try:
         r = httpx.get("http://localhost:11434/api/tags", timeout=2.0)
         return r.status_code == 200
     except Exception:
         return False
-    
+
+
 if is_ollama_running():
     # Add LangServe routes
-    add_routes(app, chat_chain, path="/chat")
-    add_routes(app, symptoms_chain, path="/symptoms")
-    add_routes(app, groq_symptoms_chain, path="/symptoms/v2")
+    add_routes(app, chat_chain, path="/chat", input_type=ChatInput)
+    add_routes(app, medgemma_symptoms_chain, path="/symptoms")
 else:
     print("❌ Ollama is not running. Start it with `ollama serve`.")
     print("⚠️ Skipping Ollama routes, service not available.")
