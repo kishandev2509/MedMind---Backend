@@ -1,4 +1,5 @@
 from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_community.chat_message_histories import ChatMessageHistory
 
 
 def create_multimodal_human_message(input_dict: dict) -> HumanMessage:
@@ -31,3 +32,24 @@ def lab_report_input_processor(input_dict: dict) -> list:
     system_message = SystemMessage(content=system_text)
     human_message = HumanMessage(content=content)
     return [system_message, human_message]
+
+
+store = {}
+
+
+def get_session_history(session_id: str) -> ChatMessageHistory:
+    """Gets the chat history for a given session ID."""
+    if session_id not in store:
+        store[session_id] = ChatMessageHistory()
+    return store[session_id]
+
+def trim_history(inputs):
+    """
+    Trims the 'history' in the input dictionary to the last 10 messages.
+    (5 user questions and 5 AI answers).
+    """
+    history = inputs.get("history", []) # Get history, default to empty list
+    if len(history) > 20:
+        # Keep only the most recent 10 messages
+        inputs["history"] = history[-20:]
+    return inputs

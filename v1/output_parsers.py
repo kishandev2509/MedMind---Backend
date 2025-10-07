@@ -1,4 +1,3 @@
-import markdown
 from langchain_core.output_parsers import BaseOutputParser
 from pydantic import BaseModel, Field
 
@@ -6,8 +5,6 @@ from pydantic import BaseModel, Field
 class ChatBotOutputParser(BaseOutputParser[str]):
     def parse(self, text: str) -> str:
         return text
-        html = markdown.markdown(text)
-        return html
 
 
 class PossibleDisease(BaseModel):
