@@ -7,4 +7,4 @@ from langchain_ollama import ChatOllama
 # gemma31b_llm = ChatOllama(model="gemma3:1b")
 # gemma34b_llm = ChatOllama(model="gemma3:4b")
 # structured_medgemma_llm = medgemma_llm.with_structured_output(SymptomOutput)
-medgemma_llm = ChatOllama(model="amsaravi/medgemma-4b-it:q6")
+medgemma_llm = ChatOllama(model="amsaravi/medgemma-4b-it:q6", keep_alive=-1)
