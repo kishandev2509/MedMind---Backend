@@ -1,5 +1,5 @@
-from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_community.chat_message_histories import ChatMessageHistory
+from langchain_core.messages import HumanMessage, SystemMessage
 
 
 def create_multimodal_human_message(input_dict: dict) -> HumanMessage:
@@ -34,22 +34,31 @@ def lab_report_input_processor(input_dict: dict) -> list:
     return [system_message, human_message]
 
 
-store = {}
+mental_health_store = {}
+chat_store = {}
 
 
-def get_session_history(session_id: str) -> ChatMessageHistory:
-    """Gets the chat history for a given session ID."""
-    if session_id not in store:
-        store[session_id] = ChatMessageHistory()
-    return store[session_id]
+def get_chat_session_history(user_id: str) -> ChatMessageHistory:
+    """Gets the chat history for a given session ID. in mental health"""
+    if user_id not in chat_store:
+        chat_store[user_id] = ChatMessageHistory()
+    return chat_store[user_id]
+
+def get_mh_session_history(user_id: str) -> ChatMessageHistory:
+    """Gets the chat history for a given session ID. in mental health"""
+    if user_id not in mental_health_store:
+        mental_health_store[user_id] = ChatMessageHistory()
+    return mental_health_store[user_id]
+
 
 def trim_history(inputs):
     """
     Trims the 'history' in the input dictionary to the last 10 messages.
     (5 user questions and 5 AI answers).
     """
-    history = inputs.get("history", []) # Get history, default to empty list
-    if len(history) > 20:
+    mem_len = 5
+    history = inputs.get("history", [])  # Get history, default to empty list
+    if len(history) > mem_len:
         # Keep only the most recent 10 messages
-        inputs["history"] = history[-20:]
+        inputs["history"] = history[-mem_len:]
     return inputs

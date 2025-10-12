@@ -8,14 +8,14 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from langserve import add_routes
 
-from v1.chains import chat_chain, medgemma_symptoms_chain, medgemma_lab_report_chain, mental_health_chain_with_memory
+from v1.chains import chat_chain_with_memory, medgemma_symptoms_chain, medgemma_lab_report_chain, mental_health_chain_with_memory
 
 load_dotenv()
 
 
 def add_routes_to_app():
     """Adds routes to the FastAPI app."""
-    add_routes(app, chat_chain, path="/chat")
+    add_routes(app, chat_chain_with_memory, path="/chat")
     add_routes(app, medgemma_symptoms_chain, path="/symptom_checker")
     add_routes(app, medgemma_lab_report_chain, path="/lab_report_analysis")
     add_routes(app, mental_health_chain_with_memory, path="/mental_health_support")
